@@ -17,7 +17,19 @@ export const taskApiSlice = apiSlice.injectEndpoints({
         ...result.ids.map((id) => ({ type: 'task', id })),
       ],
     }),
+    addNewTask: builder.mutation({
+      query: (initialTask) => ({
+        url: '/tasks',
+        method: 'POST',
+        body: {
+          task: initialTask,
+          date: new Date().toISOString(),
+          isComplete: false,
+        },
+      }),
+      invalidatesTags: [{ type: 'task', id: 'LIST' }],
+    }),
   }),
 });
 
-export const { useGetTasksQuery } = taskApiSlice;
+export const { useGetTasksQuery, useAddNewTaskMutation } = taskApiSlice;

@@ -1,4 +1,8 @@
-import { useDeleteTaskMutation, useGetTasksQuery } from '../store/taskSlice';
+import {
+  useDeleteTaskMutation,
+  useGetTasksQuery,
+  useToggleTaskCompletionMutation,
+} from '../store/taskSlice';
 
 const TaskItem = ({ taskId }) => {
   const { task } = useGetTasksQuery('getTasks', {
@@ -14,19 +18,20 @@ const TaskItem = ({ taskId }) => {
       console.error('failed to Delete the Task', error);
     }
   };
-
+  const [toggleTaskCompletion] = useToggleTaskCompletionMutation();
+  const onTaskCompleteClicked = () => {
+    const status = !task.isComplete;
+    toggleTaskCompletion({ id: task.id, isComplete: status });
+  };
   return (
     <article className="task">
       <span>{task.body}</span>
-      <button key={task.id} type="button" className="completedBtn">
+      <button key={task.id} type="button" className="completedBtn" onClick={onTaskCompleteClicked}>
         Completed
       </button>
-      <button
-        key={task.id}
-        type="button"
-        className="deleteBtn"
-        onClick={onDeleteTaskClicked}
-      ></button>
+      <button key={task.id} type="button" className="deleteBtn" onClick={onDeleteTaskClicked}>
+        Delete
+      </button>
     </article>
   );
 };

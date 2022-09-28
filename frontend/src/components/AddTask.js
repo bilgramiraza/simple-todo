@@ -11,7 +11,7 @@ const AddTask = () => {
   const onTaskSubmit = async () => {
     if (canSave) {
       try {
-        await addNewTask({ task }).unwrap();
+        await addNewTask(task).unwrap();
 
         setTask('');
       } catch (error) {

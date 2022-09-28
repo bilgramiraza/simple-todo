@@ -29,7 +29,15 @@ export const taskApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'task', id: 'LIST' }],
     }),
+    deleteTask: builder.mutation({
+      query: ({ id }) => ({
+        url: `/tasks/${id}`,
+        method: 'DELETE',
+        body: { id },
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: 'task', id: arg.id }],
+    }),
   }),
 });
 
-export const { useGetTasksQuery, useAddNewTaskMutation } = taskApiSlice;
+export const { useGetTasksQuery, useAddNewTaskMutation, useDeleteTaskMutation } = taskApiSlice;

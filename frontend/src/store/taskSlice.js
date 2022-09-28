@@ -37,7 +37,32 @@ export const taskApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [{ type: 'task', id: arg.id }],
     }),
+    toggleTaskCompletion: builder.mutation({
+      query: ({ id, isComplete }) => ({
+        url: `tasks/${id}`,
+        method: 'PATCH',
+        body: { isComplete },
+      }),
+      async onQueryStarted({ id, isComplete }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          taskApiSlice.util.updateQueryData('getTasks', 'getTasks', (draft) => {
+            const task = draft.entities[id];
+            if (task) task.isComplete = isComplete;
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetTasksQuery, useAddNewTaskMutation, useDeleteTaskMutation } = taskApiSlice;
+export const {
+  useGetTasksQuery,
+  useAddNewTaskMutation,
+  useDeleteTaskMutation,
+  useToggleTaskCompletionMutation,
+} = taskApiSlice;

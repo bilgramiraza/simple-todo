@@ -1,4 +1,4 @@
-import { useGetTasksQuery } from '../store/taskSlice';
+import { useDeleteTaskMutation, useGetTasksQuery } from '../store/taskSlice';
 
 const TaskItem = ({ taskId }) => {
   const { task } = useGetTasksQuery('getTasks', {
@@ -6,6 +6,14 @@ const TaskItem = ({ taskId }) => {
       task: data?.entities[taskId],
     }),
   });
+  const [deleteTask] = useDeleteTaskMutation();
+  const onDeleteTaskClicked = async () => {
+    try {
+      await deleteTask({ id: taskId }).unwrap();
+    } catch (error) {
+      console.error('failed to Delete the Task', error);
+    }
+  };
 
   return (
     <article className="task">
@@ -13,6 +21,12 @@ const TaskItem = ({ taskId }) => {
       <button key={task.id} type="button" className="completedBtn">
         Completed
       </button>
+      <button
+        key={task.id}
+        type="button"
+        className="deleteBtn"
+        onClick={onDeleteTaskClicked}
+      ></button>
     </article>
   );
 };

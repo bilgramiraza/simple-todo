@@ -2,18 +2,13 @@ import { useGetTasksQuery } from '../store/taskSlice';
 import TaskItem from './TaskItem';
 
 const AllTasks = () => {
-  const { data: tasks, isLoading, isSuccess, isError, error } = useGetTasksQuery();
+  const { data: tasks, isLoading, isSuccess, isError, error } = useGetTasksQuery('getTasks');
 
   let content;
-  console.log(tasks);
   if (isLoading) {
     content = <p>Loading...</p>;
   } else if (isSuccess) {
-    content = tasks.ids.map((taskId) => (
-      <li>
-        <TaskItem key={taskId} taskId={taskId} />
-      </li>
-    ));
+    content = tasks.ids.map((taskId) => <TaskItem key={taskId} taskId={taskId} />);
   } else if (isError) {
     content = <p>{error}</p>;
   }

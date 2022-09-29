@@ -24,15 +24,15 @@ const TaskItem = ({ taskId }) => {
     toggleTaskCompletion({ id: task.id, isComplete: status });
   };
   return (
-    <article className="task">
-      <span>{task.body}</span>
-      <button key={task.id} type="button" className="completedBtn" onClick={onTaskCompleteClicked}>
-        Completed
+    <li key={taskId} className="task">
+      <span>{task?.task}</span>
+      <button type="button" className="completedBtn" onClick={onTaskCompleteClicked}>
+        {task?.isComplete ? 'Done' : 'Complete'}
       </button>
-      <button key={task.id} type="button" className="deleteBtn" onClick={onDeleteTaskClicked}>
+      <button type="button" className="deleteBtn" onClick={onDeleteTaskClicked}>
         Delete
       </button>
-    </article>
+    </li>
   );
 };
 
